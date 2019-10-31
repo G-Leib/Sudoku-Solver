@@ -46,33 +46,16 @@ getBoard s = [ toIntList rows | rows <- lines s]
 getNRows :: Board -> Int
 getNRows b = length(b)
 
--- TODO #3
+-- TODONE #3
 -- name: getNCols
 -- description: given a board, return its number of columns or 0 if rows do not have the same number of columns
 -- input: a board
 -- output: number of columns
--- example 1: getNCols
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] yields 9
--- example 2: getNCols
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,6,0],
---   [8,0,0,0,6,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] yields 0
--- hint: use length to create a list with all the sizes of each row from the board; then decide whether all of the rows have the same size, returning that size if yes, or 0 otherwise
--- getNCols :: Board -> Int
+getNCols :: Board -> Int
+getNCols b
+  | length ( nub l ) == 1 = ( l !! 0 )
+  | otherwise = 0
+  where l = [ length r | r <- b ]
 
 -- TODO #4
 -- name: getBox
@@ -314,8 +297,8 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let nr = getNRows b
-  print nr
+  let nc = getNCols b
+  print nc
 
   -- TODO #17: validate the command-line and get the file name containing the board
 
