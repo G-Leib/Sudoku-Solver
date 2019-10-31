@@ -30,42 +30,21 @@ toIntList s = [ toInt [c] | c <- s ]
 
 -- ***** GETTER FUNCTIONS *****
 
--- TODO #1
+-- TODONE #1
 -- name: getBoard
 -- description: convert given string to a sudoku board
 -- input: a string (the board as read from a sudoku input file)
 -- output: a sudoku board
--- example: getBoard "530070000\n600195000\n098000060\n800060003\n400803001\n700020006\n060000280\n000419005\n000080079\n" yields
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ]
--- hint: use lines to convert the string into a list of strings, and then apply toIntList on each of the strings of the list to return the board
 getBoard :: [Char] -> Board
 getBoard s = [ toIntList rows | rows <- lines s]
 
--- TODO #2
+-- TODONE #2
 -- name: getNRows
 -- description: given a board, return its number of rows
 -- input: a board
 -- output: number of rows
--- example: getNRows
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] yields 9
--- hint: use length
--- getNRows :: Board -> Int
+getNRows :: Board -> Int
+getNRows b = length(b)
 
 -- TODO #3
 -- name: getNCols
@@ -335,7 +314,8 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  print b
+  let nr = getNRows b
+  print nr
 
   -- TODO #17: validate the command-line and get the file name containing the board
 
