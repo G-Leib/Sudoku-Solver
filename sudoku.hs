@@ -31,7 +31,6 @@ toIntList s = [ toInt [c] | c <- s ]
 -- ***** GETTER FUNCTIONS *****
 
 -- TODO #1
--- Hey gil what's up?
 -- name: getBoard
 -- description: convert given string to a sudoku board
 -- input: a string (the board as read from a sudoku input file)
