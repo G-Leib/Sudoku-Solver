@@ -129,7 +129,10 @@ getNCols b
 --   [0,0,4,1,9,0,0,5],
 --   [0,0,0,8,0,0,7,9] ] returns False
 -- hint: use getNRows and getNCols
--- isGridValid :: Board -> Bool
+isGridValid :: Board -> Bool
+isGridValid b
+  | getNRows b == getNCols b = True
+  | otherwise = False
 
 -- TODO #7
 -- name: isSequenceValid
@@ -297,8 +300,8 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let nc = getNCols b
-  print nc
+  let v = isGridValid b
+  print v
 
   -- TODO #17: validate the command-line and get the file name containing the board
 
