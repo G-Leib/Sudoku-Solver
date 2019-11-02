@@ -92,7 +92,7 @@ isGridValid b
   | getNRows b == getNCols b = True
   | otherwise = False
 
--- TODOnzobuiwebufaiowebufiouabweuib #7
+-- TODOne #7
 -- name: isSequenceValid
 -- description: return True/False depending whether the given sequence is valid or not, according to sudoku rules
 -- input: a sequence of digits from 0-9
@@ -150,7 +150,8 @@ isCompleted b = not (elem 0 (concat b))
 -- description: return True/False depending whether the given board is solved or not; a board is solved if it is completed and still valid
 -- input: a board
 -- output: True/False
--- isSolved :: Board -> Bool
+isSolved :: Board -> Bool
+isSolved b = isCompleted b && isValid b
 
 -- ***** SETTER FUNCTIONS *****
 
@@ -261,7 +262,7 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let v = isCompleted b
+  let v = isSolved b
   print v
 
   -- TODO #17: validate the command-line and get the file name containing the board
