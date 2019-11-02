@@ -68,24 +68,17 @@ getNCols b
 getBox :: Board -> Int -> Int -> Sequence
 getBox b d o = concat [ slice l (o*3) (o*3+3) | l <- (slice b (d*3) (d*3+3)) ]
 
--- TODO #5
+-- TODIDIT #5
 -- name: getEmptySpot
 -- description: given a board, return the first location that is empty (i.e., it has zero), if one exists; OK to assume that you will only call this function when you know that there is an empty spot
 -- input: a board
 -- output: a tuple with the coordinates (i, j) of the empty spot found
--- example: getEmptySpot
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] yields (0,2)
--- hint: use list comprehension to generate all the coordinates of the board that are empty; use head to return the first coordinate of your list
--- getEmptySpot :: Board -> (Int, Int)
-getEmptySpot b = concat b
+getEmptySpot :: Board -> (Int, Int)
+getEmptySpot b = (x,y)
+  where
+    i = head (elemIndices 0 (concat b))
+    x = quot i 9
+    y = i - x * 9
 
 -- ***** PREDICATE FUNCTIONS *****
 
@@ -294,9 +287,8 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let v = isGridValid b
-  let l = concat b
-  print l
+  let v = getEmptySpot b
+  print v
 
   -- TODO #17: validate the command-line and get the file name containing the board
 
