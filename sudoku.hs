@@ -92,61 +92,58 @@ isGridValid b
   | getNRows b == getNCols b = True
   | otherwise = False
 
--- TODO #7
+-- TODOnzobuiwebufaiowebufiouabweuib #7
 -- name: isSequenceValid
 -- description: return True/False depending whether the given sequence is valid or not, according to sudoku rules
 -- input: a sequence of digits from 0-9
 -- output: True/False
--- example 1: isSequenceValid [5,3,0,0,7,0,0,0,0] yields True
--- example 2: isSequenceValid [5,3,0,5,7,0,0,0,0] yields False
--- hint: build a list with the digits from the given sequence that are different than zero; then determine whether there are digits that repeats in the created list
--- isSequenceValid :: Sequence -> Bool
+isSequenceValid :: Sequence -> Bool
 isSequenceValid s
-  | head r == 0 && length r == 1 && = True
-  | length r == 0 
+  | i == 0 && r == 0 = True
+  | otherwise = False
   where
-    r = repeated s
-    vn = [ e | elem e [0..9] ]
-    v = not elem False vn
--- TODO #8
+    r = length( [ v | v <- [ elemIndices e s | e <- s, e /= 0 ], (length v) > 1 ] )
+    i = length [ e | e <- s, not(elem e [0..9]) ]    
+
+-- TODOne #8
 -- name: areRowsValid
 -- description: return True/False depending whether ALL of the row sequences are valid or not
 -- input: a board
 -- output: True/False
--- hint: use list comprehension and isSequenceValid
--- areRowsValid :: Board -> Bool
+areRowsValid :: Board -> Bool
+areRowsValid b = not (elem False [isSequenceValid e | e <-b ])
 
--- TODO #9
+-- TODOne #9
 -- name: areColsValid
 -- description: return True/False depending whether ALL of the col sequences are valid or not
 -- input: a board
 -- output: True/False
--- hint: use areRowsValid of the transposed board
--- areColsValid :: Board -> Bool
+areColsValid :: Board -> Bool
+areColsValid b = areRowsValid (transpose b)
 
--- TODO #10
+-- TODOne #10
 -- name: areBoxesValid
 -- description: return True/False depending whether ALL of the box sequences are valid or not
 -- input: a board
 -- output: True/False
--- hint: use list comprehension, isSequenceValid, and getBox
--- areBoxesValid :: Board -> Bool
+areBoxesValid :: Board -> Bool
+areBoxesValid b = areRowsValid [ getBox b x y | x <- [0..2], y <- [0..2]]
 
--- TODO #11
+-- TODOne #11
 -- name: isValid
 -- description: return True/False depending whether the given board is valid sudoku configuration or not
 -- input: a board
 -- output: True/False
--- hint: use isGridValid, areRowsValid, areColsValid, and areBoxesValid
--- isValid :: Board -> Bool
+isValid :: Board -> Bool
+isValid b = areColsValid b && areRowsValid b && areBoxesValid b && isGridValid b
 
--- TODO #12
+-- TODOne #12
 -- name: isCompleted
 -- description: return True/False depending whether the given board is completed or not; a board is considered completed if there isn't a single empty cell
 -- input: a board
 -- output: True/False
--- hint: use list comprehension and the elem function
--- isCompleted :: Board -> Bool
+isCompleted :: Board -> Bool
+isCompleted b = not (elem 0 (concat b))
 
 -- TODO #13
 -- name: isSolved
@@ -264,7 +261,7 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let v = getEmptySpot b
+  let v = isCompleted b
   print v
 
   -- TODO #17: validate the command-line and get the file name containing the board
@@ -278,3 +275,4 @@ main = do
   -- TODO #21: print the solutions found
 
   print "Done!"
+
