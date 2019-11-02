@@ -28,6 +28,9 @@ toInt s = read s :: Int
 toIntList :: [Char] -> Sequence
 toIntList s = [ toInt [c] | c <- s ]
 
+-- yeeeeeeaaaaaah we documented it
+slice s b e = (drop b . take e) s
+
 -- ***** GETTER FUNCTIONS *****
 
 -- TODONE #1
@@ -57,23 +60,13 @@ getNCols b
   | otherwise = 0
   where l = [ length r | r <- b ]
 
--- TODO #4
+-- TODID #4
 -- name: getBox
 -- description: given a board and box coordinates, return the correspondent box as a sequence
 -- input: a board and two integer (box coordinates)
 -- output: a sequence
--- example: getBox
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] 1 1 yields [0,8,0,6,0,2,0,3,0]
--- hint: use list comprehension to filter the rows of the target box; then transpose what you got and apply the same reasoning to filter the columns; use concat to return the sequence
--- getBox :: Board -> Int -> Int -> Sequence
+getBox :: Board -> Int -> Int -> Sequence
+getBox b d o = concat [ slice l (o*3) (o*3+3) | l <- (slice b (d*3) (d*3+3)) ]
 
 -- TODO #5
 -- name: getEmptySpot
@@ -92,6 +85,7 @@ getNCols b
 --   [0,0,0,0,8,0,0,7,9] ] yields (0,2)
 -- hint: use list comprehension to generate all the coordinates of the board that are empty; use head to return the first coordinate of your list
 -- getEmptySpot :: Board -> (Int, Int)
+getEmptySpot b = concat b
 
 -- ***** PREDICATE FUNCTIONS *****
 
@@ -301,7 +295,8 @@ main = do
   contents <- hGetContents f
   let b = getBoard contents
   let v = isGridValid b
-  print v
+  let l = concat b
+  print l
 
   -- TODO #17: validate the command-line and get the file name containing the board
 
