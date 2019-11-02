@@ -87,35 +87,6 @@ getEmptySpot b = (x,y)
 -- description: given a board, return True/False depending whether the given board constitutes a valid grid (i.e., #rows = #cols = 9) or not
 -- input: a board
 -- output: True/False
--- example 1: isGridValid
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] yields True
--- example 2:
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] returns False
--- example 3:
--- [ [5,3,0,7,0,0,0,0],
---   [6,0,1,9,5,0,0,0],
---   [8,0,0,6,0,0,0,3],
---   [4,0,8,0,3,0,0,1],
---   [7,0,0,2,0,0,0,6],
---   [0,0,0,0,0,2,8,0],
---   [0,0,4,1,9,0,0,5],
---   [0,0,0,8,0,0,7,9] ] returns False
--- hint: use getNRows and getNCols
 isGridValid :: Board -> Bool
 isGridValid b
   | getNRows b == getNCols b = True
@@ -130,7 +101,13 @@ isGridValid b
 -- example 2: isSequenceValid [5,3,0,5,7,0,0,0,0] yields False
 -- hint: build a list with the digits from the given sequence that are different than zero; then determine whether there are digits that repeats in the created list
 -- isSequenceValid :: Sequence -> Bool
-
+isSequenceValid s
+  | head r == 0 && length r == 1 && = True
+  | length r == 0 
+  where
+    r = repeated s
+    vn = [ e | elem e [0..9] ]
+    v = not elem False vn
 -- TODO #8
 -- name: areRowsValid
 -- description: return True/False depending whether ALL of the row sequences are valid or not
