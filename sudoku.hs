@@ -164,6 +164,9 @@ isSolved b = isCompleted b && isValid b
 -- example 2: setRowAt [1, 2, 3, 8, 4, 5] 3 9 yields [1,2,3,8,4,5]
 -- hint: use concatenation, take, and drop
 -- setRowAt :: Sequence -> Int -> Int -> Sequence
+setRowAt s i v
+  | s !! i == 0 = (concat [take i s, [v], drop (i+1) s])
+  | otherwise = s
 
 -- TODO #15
 -- name: setBoardAt
@@ -262,8 +265,8 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let v = isSolved b
-  print v
+  let q = setRowAt [1, 2, 3, 7, 4, 5] 3 9
+  print q
 
   -- TODO #17: validate the command-line and get the file name containing the board
 
