@@ -160,10 +160,7 @@ isSolved b = isCompleted b && isValid b
 -- description: given a sequence, an index, and a value, writes the value at the index location, returning a new sequence, but only if the original value at the specified location is empty; otherwise, return the original sequence unchanged
 -- input: a sequence, an index, and a value
 -- output: a new sequence
--- example 1: setRowAt [1, 2, 3, 0, 4, 5] 3 9 yields [1,2,3,9,4,5]
--- example 2: setRowAt [1, 2, 3, 8, 4, 5] 3 9 yields [1,2,3,8,4,5]
--- hint: use concatenation, take, and drop
--- setRowAt :: Sequence -> Int -> Int -> Sequence
+setRowAt :: Sequence -> Int -> Int -> Sequence
 setRowAt s i v
   | s !! i == 0 = (concat [take i s, [v], drop (i+1) s])
   | otherwise = s
@@ -173,75 +170,16 @@ setRowAt s i v
 -- description: given a board, two indexes i and j (representing coordinates), and a value, writes the value at the (i, j) coordinate, returning the new board, but only if the original value at the specified location is empty; otherwise, return the original board unchanged
 -- input: a board, two indexes (i, j), and a value
 -- output: a new board
--- example 1: setBoardAt
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] 0 2 4 yields
--- [ [5,3,4,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ]
--- hint: use concatenation and setRowAt
--- setBoardAt :: Board -> Int -> Int -> Int -> Board
+setBoardAt :: Board -> Int -> Int -> Int -> Board
+setBoardAt b i j v = (concat [take i b, [setRowAt (b !! i) j v], drop (i+1) b])
 
 -- TODO #16
 -- name: buildChoices
 -- description: given a board and a two indexes i and j (representing coordinates), generate ALL possible boards, replacing the cell at (i, j) with ALL possible digits from 1 to 9; OK to assume that the cell at (i, j) is empty
 -- input: a board and two indexes (i, j)
 -- output: a list of boards from the original board
--- example: buildChoices
--- [ [5,3,0,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ] 0 2 yields
--- [
--- [ [5,3,1,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ],
--- [ [5,3,2,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ],
--- ...
--- [ [5,3,9,0,7,0,0,0,0],
---   [6,0,0,1,9,5,0,0,0],
---   [0,9,8,0,0,0,0,6,0],
---   [8,0,0,0,6,0,0,0,3],
---   [4,0,0,8,0,3,0,0,1],
---   [7,0,0,0,2,0,0,0,6],
---   [0,6,0,0,0,0,2,8,0],
---   [0,0,0,4,1,9,0,0,5],
---   [0,0,0,0,8,0,0,7,9] ]
--- ]
--- hint: use list comprehension and the function setBoardAt
--- buildChoices :: Board -> Int -> Int -> [Board]
+buildChoices :: Board -> Int -> Int -> [Board]
+buildChoices b i j = [ setBoardAt b i j v | v <- [1..9] ]
 
 -- name: solve
 -- description: given a board, finds all possible solutions (note that dead ends or invalid intermediate solutions are listed as empty boards)
@@ -265,7 +203,9 @@ main = do
   f <- openFile "sudoku0.txt" ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let q = setRowAt [1, 2, 3, 7, 4, 5] 3 9
+  let i = 0
+  let j = 2
+  let q = buildChoices b i j
   print q
 
   -- TODO #17: validate the command-line and get the file name containing the board
