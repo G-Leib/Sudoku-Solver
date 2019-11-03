@@ -1,11 +1,12 @@
 -- CS3210 - Principles of Programming Languages - Fall 2019
 -- Programming Assignment 02 - A Sudoku Solver
 -- Author(s): Shapiro, John; Leibovich, Gil
--- Date:
+-- Date: 11/2/2019
 
 import System.Environment
 import System.IO
 import Data.List
+import Control.Monad
 
 type Sequence = [Int]
 type Board    = [Sequence]
@@ -33,6 +34,15 @@ toIntList s = [ toInt [c] | c <- s ]
 -- input: a sequence
 -- output: slice of the sequence
 slice s b e = (drop b . take e) s
+
+-- name: print solutions
+-- description: uses Control.Monad package and prints out each board in a list of solutions
+-- input: a list of valid solutions 's'
+-- output: print all solved boards with a break in between them
+printSolutions s = 
+  forM_ s $ \l -> do
+    putStrLn "-----Solution------"
+    forM_ l print
 
 -- ***** GETTER FUNCTIONS *****
 
@@ -172,7 +182,6 @@ buildChoices b i j = [ setBoardAt b i j v | v <- [1..9] ]
 -- description: given a board, finds all possible solutions (note that dead ends or invalid intermediate solutions are listed as empty boards)
 -- input: a board
 -- output: a list of boards from the original board
--- note: this code is given to you (just uncomment it when you are ready to test the solver)
 solve :: Board -> [Board]
 solve board
   | isSolved board = [board]
@@ -184,6 +193,10 @@ solve board
       i = fst emptySpot
       j = snd emptySpot
 
+-- name: validChoices
+-- description: calls solve and uses list comprehension to make a list of valid boards
+-- input: a board
+-- output: a list of solved boards
 validChoices b = [ v | v <- solve b, length v > 1]
 
 -- program starts here
@@ -192,7 +205,7 @@ main = do
   f <- openFile (myArgs !! 0) ReadMode
   contents <- hGetContents f
   let b = getBoard contents
-  let q = validChoices b
-  print q
+  let s = validChoices b
+  printSolutions s
 
   print "Done!"
